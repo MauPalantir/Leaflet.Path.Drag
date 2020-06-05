@@ -270,16 +270,27 @@ L.Handler.PathDrag = L.Handler.extend( /** @lends  L.Path.Drag.prototype */ {
         latlngs = [latlngs];
         dest    = [dest];
       }
-      for (i = 0, len = rings.length; i < len; i++) {
+      for (i = 0, len = latlngs.length; i < len; i++) {
         dest[i] = dest[i] || [];
-        for (var j = 0, jj = rings[i].length; j < jj; j++) {
+        for (var j = 0, jj = latlngs[i].length; j < jj; j++) {
           latlng     = latlngs[i][j];
-          dest[i][j] = projection
-            .unproject(projection.project(latlng)._add(diff));
-          if (applyTransform) {
-            path._bounds.extend(latlngs[i][j]);
-            rings[i][j]._add(px);
+          if (isNaN(parseFloat(latlng.lat))) {
+            for (var k = 0; k < latlng.length; k++) {
+              dest[i][j] = dest[i][j] || []
+              dest[i][j][k] = projection
+                .unproject(projection.project(latlng[k])._add(diff));            
+            }
           }
+          else {
+            dest[i][j] = projection
+              .unproject(projection.project(latlng)._add(diff));
+          }
+            if (applyTransform) {
+              path._bounds.extend(latlngs[i][j]);
+              if (rings[i][j]) {
+                rings[i][j]._add(px);
+              }
+            }            
         }
       }
     }
