@@ -183,6 +183,7 @@ L.Handler.PathDrag = L.Handler.extend( /** @lends  L.Path.Drag.prototype */ {
   _onDragEnd: function(evt) {
     var containerPoint = this._path._map.mouseEventToContainerPoint(evt);
     var moved = this.moved();
+    var map = this._path._map;
 
     // apply matrix
     if (moved) {
@@ -222,7 +223,7 @@ L.Handler.PathDrag = L.Handler.extend( /** @lends  L.Path.Drag.prototype */ {
 
     if (this._mapDraggingWasEnabled) {
       if (moved) L.DomEvent.fakeStop({ type: 'click' });
-      this._path._map.dragging.enable();
+      map.dragging.enable();
     }
   },
 
